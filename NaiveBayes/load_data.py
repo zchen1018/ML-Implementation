@@ -25,3 +25,4 @@ def load_data(file):
 
 	return rows_list, variable_names
 
+
