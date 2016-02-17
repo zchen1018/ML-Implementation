@@ -80,6 +80,11 @@ def conditional_prob(data, var_values_dict, var_names_list):
 
 # The output of class_prob() and conditional_prob() are basically the learning result
 # from the data
+# To wrap up the learning phase
+data, var_names_list, var_values_dict = load_data("lymph_train.arff")
+
+Y_prob = class_prob(data, var_values_dict, var_names_list)
+X_cond_prob = conditional_prob(data, var_values_dict, var_names_list)
 
 	
 
