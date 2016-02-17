@@ -86,5 +86,38 @@ data, var_names_list, var_values_dict = load_data("lymph_train.arff")
 Y_prob = class_prob(data, var_values_dict, var_names_list)
 X_cond_prob = conditional_prob(data, var_values_dict, var_names_list)
 
-	
+# Read in the test data
+test_data, test_var_names_list, test_var_values_dict = load_data("lymph_test.arff")
+
+# Predict the conditional probability for classficication for test data
+def predict(test_data) : #Assume test set and training set have the same variable ordering
+	prt_result = [] # a list for prediction result for all test data
+	for obs in test_data:
+		# initialize a dict for class probability
+		class_prob = dict((ele, 0) for ele in var_values_dict['class'])
+		for class_label in class_prob.keys():
+			y_prob = Y_prob[class_label]
+			ind = var_values_dict['class'].index(class_label)
+			data_cond = X_cond_prob[ind]
+
+			feature_prob = 1.0 # product of contional prob of features
+			i = 0
+			for x in obs[:-1]: # not including the class value in test data
+				feature_prob *= data_cond[i][x]				
+				i +=1
+
+			posterior = feature_prob * y_prob
+			class_prob[class_label] = posterior
+
+		# Normalization and round to 12 decimal points
+		tot = sum(class_prob.values())
+		for temp in class_prob:
+			class_prob[temp] /= tot
+			class_prob[temp] = round(class_prob[temp], 12)
+		prt_result.append(class_prob)
+
+
+	return prt_result
+
+
 
