@@ -49,7 +49,7 @@ def count_frequency(data, var_values_dict, var_names_list) :
 
 # Estimate the probabilty for the class variable
 def class_prob(data, var_values_dict, var_names_list):
-	count = countX(data, 'class', var_values_dict, var_names_list, 0) # no pseudocount
+	count = countX(data, 'class', var_values_dict, var_names_list, 1) 
 	sample_size = float(sum(count.values()))
 	for x in count:
 		count[x] /= sample_size
