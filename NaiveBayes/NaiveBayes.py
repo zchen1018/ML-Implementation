@@ -80,14 +80,6 @@ def conditional_prob(data, var_values_dict, var_names_list):
 
 # The output of class_prob() and conditional_prob() are basically the learning result
 # from the data
-# To wrap up the learning phase
-data, var_names_list, var_values_dict = load_data("lymph_train.arff")
-
-Y_prob = class_prob(data, var_values_dict, var_names_list)
-X_cond_prob = conditional_prob(data, var_values_dict, var_names_list)
-
-# Read in the test data
-test_data, test_var_names_list, test_var_values_dict = load_data("lymph_test.arff")
 
 # Predict the conditional probability for classficication for test data
 def predict(test_data) : #Assume test set and training set have the same variable ordering
@@ -119,5 +111,32 @@ def predict(test_data) : #Assume test set and training set have the same variabl
 
 	return prt_result
 
+# Format the print and count correct prediction
+def final_print(test_data):
+	prt_list = predict(test_data)
+	count = 0
+	for i in range(len(test_data)):
+		real_label = test_data[i][-1]
+		# sort the prediction result and use the max value and its label
+		prediction_dict = prt_list[i]
+		item = max([(value, key) for key, value in prediction_dict.items()])
+		prt_prob = item[0]
+		prt_label = item[1]
+		if real_label == prt_label:
+			count += 1
+		print prt_label + " " + real_label + " " + str(prt_prob)
+
+	print "\n" + str(count)
 
 
+if __name__ == '__main__':
+	# To wrap up the learning phase
+	data, var_names_list, var_values_dict = load_data("lymph_train.arff")
+
+	Y_prob = class_prob(data, var_values_dict, var_names_list)
+	X_cond_prob = conditional_prob(data, var_values_dict, var_names_list)
+
+	# Read in the test data
+	test_data, test_var_names_list, test_var_values_dict = load_data("lymph_test.arff")
+
+	final_print(test_data)
